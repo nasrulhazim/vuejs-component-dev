@@ -4,8 +4,9 @@
 
 ## API Development
 
-1. Create a model + migration - `php artisan make:model Task -m`
-2. Open up the `Task` model and update as following:
+Create a model + migration - `php artisan make:model Task -m`.
+
+Open up the `Task` model and update as following:
 
 ```php
 <?php
@@ -30,7 +31,7 @@ class Task extends Model
 }
 ```
 
-3. Open up the `Task` model migration script - `<timestamp>_create_tasks_table.php` and update as following:
+Open up the `Task` model migration script - `<timestamp>_create_tasks_table.php` and update as following:
 
 ```php
 <?php
@@ -70,7 +71,7 @@ class CreateTasksTable extends Migration
 }
 ```
 
-4. Next, you need to add a relation from users to tasks - `a user has many tasks`.  Open up `User.php` model and update as following:
+Next, you need to add a relation from users to tasks - `a user has many tasks`.  Open up `User.php` model and update as following:
 
 ```php
 <?php
@@ -108,7 +109,7 @@ class User extends Authenticatable
 }
 ```
 
-5. Now you're done with Task model and it's migration script. Next, let's setup the Task factory and seeder file. Open up the `ModelFactory.php` and update as following:
+Now you're done with Task model and it's migration script. Next, let's setup the Task factory and seeder file. Open up the `ModelFactory.php` and update as following:
 
 ```php
 $factory->define(App\Task::class, function (Faker\Generator $faker) {
@@ -121,7 +122,7 @@ $factory->define(App\Task::class, function (Faker\Generator $faker) {
 });
 ```
 
-6. Then create a `TaskSeeder` file - `php artisan make:seeder TaskSeeder` - and open it up and add the following in the `run` method:
+Then create a `TaskSeeder` file - `php artisan make:seeder TaskSeeder` - and open it up and add the following in the `run` method:
 
 ```php
 \App\User::truncate();
@@ -136,19 +137,27 @@ factory(\App\User::class, 10)->create()->each(function($u){
 });
 ```
 
-7. Now open up `DatabaseSeeder.php` and call the `TaskSeeder` class:
+Now open up `DatabaseSeeder.php` and call the `TaskSeeder` class:
 
 ```php
 $this->call(TaskSeeder::class);
 ```
 
-8. Run `php artisan db:seed` and you will have 10 users and 1000 tasks.
+Run `php artisan db:seed` and you will have 10 users and 1000 tasks.
 
-9. Next, we need an API endpoint - `http://domain.com/api/tasks` - to retrieve tasks for current logged in user. Open up `routes/api.php` and add the following to the route file.
+Next, we need an API endpoint - `http://domain.com/api/tasks` - to retrieve tasks for current logged in user. Open up `routes/api.php` and add the following to the route file.
 
 ```php
 Route::get('/tasks', function(){
-	$tasks = \App\Task::where('user_id', Auth::user()->id)->orderBy('created_at','asc')->get();
+	$tasks = \App\Task::where('user_id', Auth::user()->id)->orderBy('created_at','asc')->paginate(5);
 	return response()->json($tasks);
 })->middleware('auth:api');
 ```
+
+p/s: You want to create controller for your API, in my case, I just want to simplify the tutorial. :)
+
+# VueJs Component Development
+
+**Template**
+**Style**
+**Script**
