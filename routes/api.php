@@ -20,3 +20,8 @@ Route::get('/user', function (Request $request) {
 Route::post('/subscribe', 'SubscriberController@subscribe');
 
 Route::post('/unsubscribe', 'SubscriberController@unsubscribe');
+
+Route::get('/tasks', function(){
+	$tasks = \App\Task::where('user_id', Auth::user()->id)->orderBy('created_at','asc')->get();
+	return response()->json($tasks);
+})->middleware('auth:api');
