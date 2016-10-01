@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $tasks = \App\Task::where('user_id', Auth::user()->id)->orderBy('created_at','asc')->paginate(5);
+        return view('home', compact('tasks'));
     }
 }
