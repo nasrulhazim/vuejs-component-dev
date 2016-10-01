@@ -21,7 +21,7 @@ Route::post('/subscribe', 'SubscriberController@subscribe');
 
 Route::post('/unsubscribe', 'SubscriberController@unsubscribe');
 
-Route::get('/tasks', function(){
-	$tasks = \App\Task::where('user_id', Auth::user()->id)->orderBy('created_at','asc')->paginate(5);
+Route::get('/tasks/{id}', function($id){
+	$tasks = \App\Task::where('user_id', $id)->orderBy('created_at','asc')->paginate(5);
 	return response()->json($tasks);
-})->middleware('auth:api');
+});

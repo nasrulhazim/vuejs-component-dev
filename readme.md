@@ -148,8 +148,8 @@ Run `php artisan db:seed` and you will have 10 users and 1000 tasks.
 Next, we need an API endpoint - `http://domain.com/api/tasks` - to retrieve tasks for current logged in user. Open up `routes/api.php` and add the following to the route file.
 
 ```php
-Route::get('/tasks', function(){
-	$tasks = \App\Task::where('user_id', Auth::user()->id)->orderBy('created_at','asc')->paginate(5);
+Route::get('/tasks/{id}', function($id){
+	$tasks = \App\Task::where('user_id', $id)->orderBy('created_at','asc')->paginate(5);
 	return response()->json($tasks);
 })->middleware('auth:api');
 ```
@@ -158,6 +158,92 @@ p/s: You want to create controller for your API, in my case, I just want to simp
 
 # VueJs Component Development
 
-**Template**
-**Style**
-**Script**
+In VueJs Component, it consist of 3 components - template, style and script - below is the skeleton that you can use.
+
+```html
+<template>
+    <!-- your html here -->
+</template>
+
+<style type="text/css">
+    
+</style>
+
+<script type="text/javascript">
+    export default {
+        ready() {
+            console.log('Component ready.')
+        }
+    }
+</script>
+```
+
+For our example, please use the following - a component to fetch task list based on logged in user.
+
+```html
+<template>
+    <ul>
+      <li v-for="task in response.data">
+        {{ task.title }}
+      </li>
+    </ul>
+</template>
+
+<style type="text/css">
+    
+</style>
+
+<script type="text/javascript">
+    export default {
+        ready() {
+            console.log('Component ready.');
+            this.fetch();
+        },
+        data : function() {
+            return {
+                response : {}
+            }
+        },
+        methods : {
+            fetch : function() {
+                this.$http.get('/api/tasks/'+Laravel.userId).then((response) => {
+                    console.log(response.data);
+                    this.response = response.data;
+                }, (response) => {
+                    // handle error here
+                    alert(response.data.error);
+                });
+            }
+        }
+    }
+</script>
+```
+
+In your `layouts/app.blade.php`, add the following to pass in user's id to JavaScript - which required in API call.
+
+```php
+<script>
+    window.Laravel = <?php echo json_encode([
+        'csrfToken' => csrf_token(),
+        'userId' => Auth::user()->id
+    ]); ?>
+</script>
+```
+
+After you have define the VueJs Component, you need to register your VueJs Component in `resources/assets/js/app.js`.
+
+```javacript
+Vue.component('tasks', require('./components/Tasks.vue'));
+```
+
+Then just run `gulp` to compile.
+
+Next, open up `home.blade.php` and add the VueJs Component to your view
+
+```html
+<tasks></tasks>
+```
+
+Now you may login to your application - you should see the list being populated nicely. 
+
+Congratulation, you're done with basic VueJs Component Development.

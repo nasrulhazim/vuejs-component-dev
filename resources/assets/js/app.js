@@ -16,6 +16,8 @@ require('./bootstrap');
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('newsletter', require('./components/Newsletter.vue'));
 Vue.component('login', require('./components/Login.vue'));
+Vue.component('tasks', require('./components/Tasks.vue'));
+Vue.component('tasks-v2', require('./components/Taskv2.vue'));
 
 const app = new Vue({
     el: 'body'
