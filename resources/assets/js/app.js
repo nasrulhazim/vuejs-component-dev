@@ -15,6 +15,7 @@ require('./bootstrap');
 
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('newsletter', require('./components/Newsletter.vue'));
+Vue.component('login', require('./components/Login.vue'));
 
 const app = new Vue({
     el: 'body'
