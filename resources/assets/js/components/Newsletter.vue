@@ -3,7 +3,7 @@
         <div class="container">
             <div class="intro">
                 <h2 class="text-center">Subscribe for our Newsletter</h2>
-                <p class="text-center">Nunc luctus in metus eget fringilla. Aliquam sed justo ligula. Vestibulum nibh erat, pellentesque ut laoreet vitae. </p>
+                <p class="text-center">Get latest update from our company. </p>
             </div>
             <div class="form-inline">
                 <div class="form-group">
@@ -75,7 +75,14 @@
         },
         methods : {
             subscribe : function() {
-                alert(this.email);
+                console.log(this.email);
+                this.$http.post('/api/subscribe', {'email':this.email}).then((response) => {
+                    console.log(response);
+                    alert(response.data.message);
+                }, (response) => {
+                    console.log(response);
+                    alert(response.data.email[0]);
+                });
             }
         }
     }
